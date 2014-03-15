@@ -13,6 +13,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class LoginHTTPHandler extends Observable implements Runnable {
+	private final String domain = "HTTP://SET_DOMAIN_TO_WEB_APP";
 	private String user;
 	private String password;
 	private String cookie;
@@ -28,7 +29,7 @@ public class LoginHTTPHandler extends Observable implements Runnable {
 	public void run() {
 		HttpURLConnection conn = null;
 		try {
-			conn = (HttpURLConnection) (new URL("HTTP://thorch.dyndns.org/intnet/projekt/newSession.php")).openConnection();
+			conn = (HttpURLConnection) (new URL(domain + "/api/newSession.php")).openConnection();
 			conn.setRequestMethod("POST");
 			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 			
