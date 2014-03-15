@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Login\n</string>
+    <string name="app_name">Intnet</string>
+    <string name="username">Username:</string>
+    <string name="password">Password:</string>
+    <string name="login_button">Login</string>
+    <string name="create_account">\nCreate new account</string>
+    <string name="button_create_account">Create new account</string>
+    <string name="button_post_message">Post</string>
+
+</resources>

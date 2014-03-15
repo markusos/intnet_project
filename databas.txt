@@ -1,0 +1,31 @@
+Project DB
+
+Users:
+uid
+username
+salt
+passhash
+name
+sessionID
+sessionLastUsed
+...
+
+Followers:
+uid
+follower uid
+...
+
+Message:
+mid
+uid
+text
+timestamp
+...
+
+Comment:
+comentid
+mid
+uid
+text
+timestamp
+...
