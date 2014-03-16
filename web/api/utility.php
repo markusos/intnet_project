@@ -17,7 +17,7 @@
 		
 		$random = '';
 		for ($p = 0; $p < $len; $p++) {
-			$random = $random . $characters[rand(0, strlen($characters))];
+			$random = $random . $characters[rand(0, strlen($characters)-1)];
 		}
 		
 		return $random;

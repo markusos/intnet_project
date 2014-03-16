@@ -1,4 +1,5 @@
 <?php
+// This sets up the tables needed in the db 
 
 include 'api/utility.php';
 
@@ -41,7 +42,7 @@ $sqlString =	 "CREATE TABLE IF NOT EXISTS `users` (
 				  `salt` char(128) NOT NULL,
 				  `name` varchar(100) NOT NULL,
 				  `sessionID` char(32) NOT NULL,
-				  `sessionLastUsed` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				  `sessionLastUsed` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				  `userID` int(11) NOT NULL AUTO_INCREMENT,
 				  PRIMARY KEY (`userID`)
 				);";

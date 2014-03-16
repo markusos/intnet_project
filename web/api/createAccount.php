@@ -14,6 +14,7 @@ try {
 
     /*** close the database connection ***/
     $db = null;
+    echo json_encode(array("status" => 1, "message" => "OK"));
     }
 catch(PDOException $e)
     {
@@ -26,25 +27,17 @@ catch(PDOException $e)
 if (isset($_POST["user"]) && $_POST["user"] != "" && isset($_POST["name"]) && $_POST["name"] != "" && isset($_POST["password"]) && $_POST["password"] != "" && isset($_POST["password2"]) && ($_POST["password"] == $_POST["password2"]))
 {
 	//Generate password salt
-
 	$salt = randStr(128);
 
 	//Calculate passwordhash
-
 	$passWithSalt = $_POST['password'] . $salt;
 	$passwordHash = sha1($passWithSalt);
 
 	//Insert into database
-
 	insertNewUser($_POST['user'], $passwordHash, $salt, $_POST['name']);
-
-	//Redirect to newSession
-	header("Location: ../login.php");
-
 }
 else{
-	//Redirect to createAccount.php, all data not correct!
-	header("Location: ../createAccount.php?fail=1");
+	echo json_encode(array("status" => -1, "message" => "Error creating user!"));
 }
 
 ?>

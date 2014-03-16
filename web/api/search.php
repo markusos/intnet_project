@@ -10,6 +10,7 @@ if(isset($_SESSION['id']) && checkSessionID($db, $_SESSION['id']) != -1){
 
 }	
 else{
+	echo "Not valid user!";
 	return;
 }
 	

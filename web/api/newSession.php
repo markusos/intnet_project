@@ -10,9 +10,11 @@ function checkUser($user, $pw){
 		$statement = $db->prepare($sqlString);
 		$statement->execute(array($user));
 
+		$salt = "";
+
 		$rows = $statement->fetchAll();
 		foreach ($rows as $row) {
-			$salt= $row[0];
+			$salt = $row[0];
 		}
 		
 		$passWithSalt = $pw . $salt;
@@ -39,11 +41,15 @@ function checkUser($user, $pw){
 			$statement = $db->prepare($sqlString);
 			$statement->execute(array($_SESSION['id'], $user, $passwordHash));
 
-			echo "Logged in!";
+			$message = "Logged in!";
+			$status = 1;
 		}
-		else echo "ERROR!!! ";
-		
-		
+		else {
+			$message = "Username or password is not valid!";
+			$status = -1;
+		} 
+
+		echo json_encode(array('status' => $status, 'message' => $message));
 		/*** close the database connection ***/
 		$db = null;
     }
@@ -59,12 +65,8 @@ session_start();
 //Check if already loged in
 $db = getDB();
 if(isset($_SESSION['id']) && checkSessionID($db, $_SESSION['id']) != -1)
-    echo "Already logged in!";
+    echo json_encode(array('status' => 1, 'message' => "Logged in!"));
 else{
 	checkUser($_POST['user'], $_POST['password']);
-	echo checkSessionID($db, $_SESSION['id']);
 }
-
-//redirect to index.php
-header("Location: ../index.php");
 ?>

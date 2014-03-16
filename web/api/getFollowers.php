@@ -12,14 +12,16 @@ if(isset($_SESSION['id']) && checkSessionID($db, $_SESSION['id']) != -1){
 try {
 	$db = getDB();
 
+	$follows = array();
+	$follower = array();		
+
 	$sqlString = 'SELECT name, userID FROM users NATURAL JOIN followers WHERE followerUserID = ? GROUP BY userID;';
 	$statement = $db->prepare($sqlString);
 	$statement->execute(array($id));
 	
 	$rows = $statement->fetchAll();
-	echo "<div class='followerH1'>Follows:</div>";
 	foreach ($rows as $row) {
-		echo "<div class='follower'><b><a onclick=setFilter('user&id=".htmlentities($row[1])."')>" .htmlentities($row[0]). "</a></b></div>";
+		$follows[] = array("id" => htmlentities($row[1]), "name"	=> htmlentities($row[0]));	
 	}
 	
 	$sqlString = 'SELECT name, followerUserID FROM users JOIN followers WHERE followers.userID = ? AND followers.followerUserID = users.userID GROUP BY followerUserID;';
@@ -27,11 +29,11 @@ try {
 	$statement->execute(array($id));
 	
 	$rows = $statement->fetchAll();
-	echo "<div class='followerH1'>Followers:</div>";
 	foreach ($rows as $row) {
-		echo "<div class='follower'><b><a onclick=setFilter('user&id=".htmlentities($row[1])."')>" .htmlentities($row[0]). "</a></b></div>";
+		$follower[] = array("id" => htmlentities($row[1]), "name" => htmlentities($row[0]));
 	}
 	
+	echo json_encode(array("status" => 1,  "message" => "OK", 'follows' => $follows, 'follower' => $follower));
     /*** close the database connection ***/
     $db = null;
     }
@@ -41,8 +43,7 @@ catch(PDOException $e)
     }
 }		
 else{
-	// redirect to login.php
-	header("Location: login.php");
+	echo json_encode(array("status" => -1, "message" => "Not valid user!"));
 }
 
 ?>

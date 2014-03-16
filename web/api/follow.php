@@ -10,7 +10,7 @@ if(isset($_SESSION['id']) && checkSessionID($db, $_SESSION['id']) != -1){
 	$statement->execute(array($_POST["follow"], checkSessionID($db, $_SESSION['id'])));	
 }	
 else{
-	return;
+	die('Not logged in!');
 }
 
 ?>

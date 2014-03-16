@@ -76,7 +76,7 @@ catch(PDOException $e)
     }
 }		
 else{
-	//Do nothing!
+	echo "Not valid user!";
 }
 
 ?>
