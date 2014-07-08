@@ -11,8 +11,8 @@ function setFilter(filter, id){
 }
 
 $( document ).ready(function() {
-	getMessages(currentFilter, currentFilterId);	
-	getFollowers();	
+	getMessages(currentFilter, currentFilterId);
+	getFollowers();
 });
 
 $( "#login" ).submit(function( event ) {
@@ -25,16 +25,17 @@ $( "#login" ).submit(function( event ) {
 	var posting = $.post("api/newSession.php", { user: user, password: password } );
 
 	posting.done(function( response ) {
+		console.log("Login: " + response);
 		var data = jQuery.parseJSON(response);
 		if (data.status == -1) {
 			$( "#alert" ).empty().append( data.message );
-			$( "#alert" ).show();	
+			$( "#alert" ).show();
 		}
 		else {
 			$form.find( "input[name='user']" ).val("");
 			$form.find( "input[name='password']" ).val("");
-			getMessages(currentFilter, currentFilterId);	
-			getFollowers();	
+			getMessages(currentFilter, currentFilterId);
+			getFollowers();
 		}
 	});
 });
@@ -48,7 +49,7 @@ $( "#logout" ).submit(function( event ) {
 		var data = jQuery.parseJSON(response);
 		if (data.status == -1) {
 			$( "#alert" ).empty().append( data.message );
-			$( "#alert" ).show();	
+			$( "#alert" ).show();
 		}
 		else {
 			loggedOut();
@@ -58,27 +59,27 @@ $( "#logout" ).submit(function( event ) {
 
 $( "#createAccountButton" ).click(function( event ) {
 	$( "#feed" ).hide();
-	$( "#info" ).hide();	
+	$( "#info" ).hide();
 	$( "#alert" ).hide();
-	$( "#createAccount" ).show();	
+	$( "#createAccount" ).show();
 });
 
 function loggedIn() {
 	$( "#feed" ).show();
-	$( "#info" ).hide();	
+	$( "#info" ).hide();
 	$( "#login" ).hide();
 	$( "#logout" ).show();
-	$( "#createAccount" ).hide();	
+	$( "#createAccount" ).hide();
 	$( "#alert" ).hide();
 }
 
 function loggedOut() {
 	$( "#feed" ).hide();
-	$( "#info" ).show();	
+	$( "#info" ).show();
 	$( "#login" ).show();
 	$( "#logout" ).hide();
-	$( "#createAccount" ).hide();	
-	$( "#alert" ).hide();	
+	$( "#createAccount" ).hide();
+	$( "#alert" ).hide();
 }
 
 function getMessages(filter, id)
@@ -95,7 +96,7 @@ function getMessages(filter, id)
 
 			var count = 0
 			data.messages.forEach(function(message) {
-				
+
 				var messageHTML = "";
 
 				messageHTML += "<div class='panel panel-primary'>";
@@ -148,7 +149,7 @@ $( "#createAccountForm" ).submit(function( event ) {
 		var data = jQuery.parseJSON(response);
 		if (data.status == -1) {
 			$( "#alert" ).empty().append( data.message );
-			$( "#alert" ).show();	
+			$( "#alert" ).show();
 		}
 		else {
 			loggedOut();
@@ -158,39 +159,37 @@ $( "#createAccountForm" ).submit(function( event ) {
 
 function postComment(id, comment)
 {
-	if (window.XMLHttpRequest)
-	{// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp=new XMLHttpRequest();
-	}
-	else
-	{// code for IE6, IE5
-		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-	}
+	var posting = $.post("api/createComment.php", { messageID: id, text: comment } );
 
-	xmlhttp.open("POST","api/createComment.php",true);
-	xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded;charset=ISO-8859-1");
-	xmlhttp.send("messageID="+ id +"&text=" + comment);
-	
-	getMessages(currentFilter, currentFilterId);
+	posting.done(function( response ) {
+		console.log("Post Comment: " + response)
+		var data = jQuery.parseJSON(response);
+		if (data.status == -1) {
+			$( "#alert" ).empty().append( data.message );
+			$( "#alert" ).show();
+		}
+		else {
+			getMessages(currentFilter, currentFilterId);
+		}
+	});
 }
 
 function postMessage(message)
 {
-	if (window.XMLHttpRequest)
-	{// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp=new XMLHttpRequest();
-	}
-	else
-	{// code for IE6, IE5
-		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-	}
+	var posting = $.post("api/createMessage.php", { text: message } );
 
-	xmlhttp.open("POST","api/createMessage.php",true);
-	xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded;charset=ISO-8859-1");
-	xmlhttp.send("text="+ message);
-	
-	messageText.value = "";
-	setFilter("self");
+	posting.done(function( response ) {
+		console.log("Post Comment: " + response)
+		var data = jQuery.parseJSON(response);
+		if (data.status == -1) {
+			$( "#alert" ).empty().append( data.message );
+			$( "#alert" ).show();
+		}
+		else {
+			messageText.value = "";
+			setFilter("self");
+		}
+	});
 }
 
 function follow(id)
@@ -203,7 +202,7 @@ function follow(id)
 	{// code for IE6, IE5
 		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 	}
-	
+
 	xmlhttp.onreadystatechange=function()
 	{
 		if (xmlhttp.readyState==4 && xmlhttp.status==200)
@@ -215,10 +214,10 @@ function follow(id)
 	xmlhttp.open("POST","api/follow.php",true);
 	xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 	xmlhttp.send("follow="+ id);
-	
+
 	getFollowers();
 	getMessages(currentFilter, currentFilterId);
-	
+
 }
 
 function getFollowers(id)

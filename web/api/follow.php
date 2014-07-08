@@ -1,16 +1,15 @@
 <?php
 
-include 'utility.php';
+include_once 'checkAuth.php';
+include_once 'utility.php';
 
-session_start();
-$db = getDB();
-if(isset($_SESSION['id']) && checkSessionID($db, $_SESSION['id']) != -1){
+	if (!isset($_POST["follow"])) {
+		echo json_encode(array("status" => -1, "message" => "Unspecified userID"));
+		die();
+	}
+
 	$sqlString = 'INSERT INTO followers (userID, followerUserID) VALUES (?, ?);';
 	$statement = $db->prepare($sqlString);
-	$statement->execute(array($_POST["follow"], checkSessionID($db, $_SESSION['id'])));	
-}	
-else{
-	die('Not logged in!');
-}
+	$statement->execute(array($_POST["follow"], checkSessionID($db, $_SESSION['id'])));
 
 ?>

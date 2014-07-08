@@ -1,19 +1,7 @@
 <?php
+include_once 'checkAuth.php';
+include_once 'utility.php';
 
-include 'utility.php';
-
-session_start();
-
-//Check if already loged in
-$db = getDB();
-if(isset($_SESSION['id']) && checkSessionID($db, $_SESSION['id']) != -1){
-
-}	
-else{
-	echo "Not valid user!";
-	return;
-}
-	
 $sqlString = 'SELECT name, text, timestamp, messageID, userID FROM message NATURAL JOIN users WHERE username = ? ORDER BY timestamp DESC;';
 $statement = $db->prepare($sqlString);
 $statement->execute(array($_POST['username']));
@@ -32,7 +20,7 @@ foreach ($rows as $row) {
 	echo "<tr>";
 	echo "<th>User: " .  htmlentities($row['name']). "</th><th>Time: " . htmlentities($row['timestamp']) ."</th>";
 	echo " </tr><tr><th colspan='2'>Message: " . wordwrap(htmlentities($row['text']), 40, "<br />\n", true)  . "</th></tr>";
-	
+
 	$sqlString = 'SELECT name, text, timestamp FROM comment NATURAL JOIN users WHERE messageID = ? ORDER BY timestamp ASC;';
 	$statement = $db->prepare($sqlString);
 	$statement->execute(array($row['messageID']));
@@ -42,11 +30,11 @@ foreach ($rows as $row) {
 		echo "<th>User: " .  htmlentities($row2['name']). "</th><th>Time: " . htmlentities($row2['timestamp']) ."</th>";
 		echo " </tr><tr><th colspan='2'>Comment: " .  wordwrap(htmlentities($row2['text']), 40, "<br />\n", true)  . "</th></tr>";
 	}
-	
+
 	echo "</table>";
 	echo "<br />";
-	
+
 	$count = $count +1;
 }
-	
+
 ?>

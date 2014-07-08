@@ -1,24 +1,12 @@
 <?php
-session_start();
+include_once 'checkAuth.php';
+include_once 'utility.php';
 
-if(!isset($_SESSION['id'])){
-	die('Not logged in!');
-}
-else{
-	include 'utility.php';
-	
-	$db = getDB();
-	$userid = checkSessionID($db, $_SESSION['id']);
-	
-	if($userID == -1)
-		die('Not logged in!');
-}
-	
+	$userID = $_SESSION['userID'];
+
 	$sqlString = 'INSERT INTO comment (messageID, userID, text) VALUES (?, ?, ?);';
 	$statement = $db->prepare($sqlString);
-	$statement->execute(array($_POST['messageID'], $userid, utf8_decode($_POST['text'])));
-	
-	echo 'Added comment:<br>';
-	echo $_POST['text'];
-?>
+	$statement->execute(array($_POST['messageID'], $userID, utf8_decode($_POST['text'])));
 
+	echo json_encode(array("status" => 1, "message" => "Added comment:" . $_POST['text']));
+?>

@@ -1,10 +1,10 @@
 <?php
-include 'utility.php';
+include_once 'utility.php';
 
 function checkUser($user, $pw){
 
 	try {
-		$db = getDB();
+		global $db;
 
 		$sqlString = 'SELECT salt FROM users WHERE username=?';
 		$statement = $db->prepare($sqlString);
@@ -16,10 +16,10 @@ function checkUser($user, $pw){
 		foreach ($rows as $row) {
 			$salt = $row[0];
 		}
-		
+
 		$passWithSalt = $pw . $salt;
 		$passwordHash = sha1($passWithSalt);
-		
+
 		$sqlString = 'SELECT username, userID FROM users WHERE username=? && passhash=?;';
 		$statement = $db->prepare($sqlString);
 		$statement->execute(array($user, $passwordHash));
@@ -47,26 +47,29 @@ function checkUser($user, $pw){
 		else {
 			$message = "Username or password is not valid!";
 			$status = -1;
-		} 
+		}
 
 		echo json_encode(array('status' => $status, 'message' => $message));
-		/*** close the database connection ***/
 		$db = null;
-    }
+	}
 	catch(PDOException $e)
-    {
+	{
 		echo $e->getMessage();
-    }
+	}
 }
 
-//Create new session
 session_start();
 
 //Check if already loged in
-$db = getDB();
-if(isset($_SESSION['id']) && checkSessionID($db, $_SESSION['id']) != -1)
-    echo json_encode(array('status' => 1, 'message' => "Logged in!"));
-else{
+if(isset($_SESSION['id']) && checkSessionID($db, $_SESSION['id']) != -1) {
+	echo json_encode(array('status' => 1, 'message' => "Logged in!"));
+}
+else if (isset($_POST['user']) && isset($_POST['password'])){
 	checkUser($_POST['user'], $_POST['password']);
 }
+else {
+	echo json_encode(array("status" => -1, "message" => "No username and/or password set"));
+	die();
+}
+
 ?>

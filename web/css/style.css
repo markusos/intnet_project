@@ -3,3 +3,7 @@ body {
   padding-top: 100px;
   padding-bottom: 20px;
 }
+
+.panel-body {
+  word-wrap: break-word;
+}

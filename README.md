@@ -8,6 +8,6 @@ The project is implemented using PHP with and MySQL database for storage.
 ## Setup ##
 
 - Create a database with the name 'intnet'.
-- Configure the db user name and password in '/api/utility.php'-file.
+- Configure the db user name and password in '/api/config.ini'-file.
 - Run 'setup.php' to create all the needed database tables.
 - Configure the 'domain' variable in the android app to connect to the right domain.
