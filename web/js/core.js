@@ -10,6 +10,19 @@ function setFilter(filter, id){
 	$( "#menueDiv li a[onclick~='setFilter('" + filter + "')']" ).parent().addClass( "active" );
 }
 
+function showSuccess(message){
+	$( "#success" ).empty().append( message );
+	$( "#success" ).fadeIn();
+
+	// Hide after 2 sec
+	setTimeout(function(){$( "#success" ).fadeOut();},2000)
+}
+
+function showAlert(message){
+	$( "#alert" ).empty().append( message );
+	$( "#alert" ).fadeIn();
+}
+
 $( document ).ready(function() {
 	getMessages(currentFilter, currentFilterId);
 	getFollowers();
@@ -28,8 +41,7 @@ $( "#login" ).submit(function( event ) {
 		console.log("Login: " + response);
 		var data = jQuery.parseJSON(response);
 		if (data.status == -1) {
-			$( "#alert" ).empty().append( data.message );
-			$( "#alert" ).show();
+			showAlert(data.message);
 		}
 		else {
 			$form.find( "input[name='user']" ).val("");
@@ -48,8 +60,7 @@ $( "#logout" ).submit(function( event ) {
 	posting.done(function( response ) {
 		var data = jQuery.parseJSON(response);
 		if (data.status == -1) {
-			$( "#alert" ).empty().append( data.message );
-			$( "#alert" ).show();
+			showAlert(data.message);
 		}
 		else {
 			loggedOut();
@@ -146,13 +157,18 @@ $( "#createAccountForm" ).submit(function( event ) {
 	var posting = $.post("api/createAccount.php", { user: user, name: name, password: password, password2: password2 } );
 
 	posting.done(function( response ) {
+		console.log(response);
 		var data = jQuery.parseJSON(response);
 		if (data.status == -1) {
-			$( "#alert" ).empty().append( data.message );
-			$( "#alert" ).show();
+			showAlert(data.message);
 		}
 		else {
+			inputUsername.value = "";
+			inputName.value = "";
+			inputPassword.value = "";
+			inputPassword2.value = "";
 			loggedOut();
+			showSuccess(data.message);
 		}
 	});
 });
@@ -165,8 +181,7 @@ function postComment(id, comment)
 		console.log("Post Comment: " + response)
 		var data = jQuery.parseJSON(response);
 		if (data.status == -1) {
-			$( "#alert" ).empty().append( data.message );
-			$( "#alert" ).show();
+			showAlert(data.message);
 		}
 		else {
 			getMessages(currentFilter, currentFilterId);
@@ -182,8 +197,7 @@ function postMessage(message)
 		console.log("Post Comment: " + response)
 		var data = jQuery.parseJSON(response);
 		if (data.status == -1) {
-			$( "#alert" ).empty().append( data.message );
-			$( "#alert" ).show();
+			showAlert(data.message);
 		}
 		else {
 			messageText.value = "";
@@ -194,30 +208,19 @@ function postMessage(message)
 
 function follow(id)
 {
-	if (window.XMLHttpRequest)
-	{// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp=new XMLHttpRequest();
-	}
-	else
-	{// code for IE6, IE5
-		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-	}
+	var posting = $.post("api/follow.php", { follow: id } );
 
-	xmlhttp.onreadystatechange=function()
-	{
-		if (xmlhttp.readyState==4 && xmlhttp.status==200)
-		{
-			//document.getElementById("usersDiv").innerHTML=xmlhttp.responseText;
+	posting.done(function( response ) {
+		console.log("Follow id: " + response)
+		var data = jQuery.parseJSON(response);
+		if (data.status == -1) {
+			showAlert(data.message);
 		}
-	}
-
-	xmlhttp.open("POST","api/follow.php",true);
-	xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-	xmlhttp.send("follow="+ id);
-
-	getFollowers();
-	getMessages(currentFilter, currentFilterId);
-
+		else {
+			getFollowers();
+			getMessages(currentFilter, currentFilterId);
+		}
+	});
 }
 
 function getFollowers(id)

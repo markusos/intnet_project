@@ -15,6 +15,8 @@ try {
 	$sqlString = 'INSERT INTO followers (userID, followerUserID) VALUES (?, ?);';
 	$statement = $db->prepare($sqlString);
 	$statement->execute(array($userToFollow, $userId));
+
+	echo json_encode(array("status" => 1, "message" => "Followed userID: " . $userToFollow ));
 }
 catch(PDOException $e)
 {

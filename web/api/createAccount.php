@@ -10,7 +10,15 @@ function insertNewUser($user, $pwHash, $salt, $fullname) {
     $statement = $db->prepare($sqlString);
     $statement->execute(array($user, $pwHash, $salt, $fullname));
 
-    echo json_encode(array("status" => 1, "message" => "OK"));
+    if ($statement->errorInfo()[0] == "00000") {
+      echo json_encode(array("status" => 1, "message" => "Account Created!" ));
+    }
+    else if ($statement->errorInfo()[0] == "23000") {
+      echo json_encode(array("status" => -1, "message" => "User '" . $user . "' already exists"));
+    }
+    else {
+      echo json_encode(array("status" => -1, "message" => "Error creating user!" ));
+    }
   }
   catch(PDOException $e)
   {

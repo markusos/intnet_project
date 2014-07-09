@@ -38,7 +38,7 @@ try {
 	$statement->execute();
 
 	$sqlString =	 "CREATE TABLE IF NOT EXISTS `users` (
-		`username` varchar(20) NOT NULL,
+		`username` varchar(20) NOT NULL UNIQUE,
 		`passhash` char(128) NOT NULL,
 		`salt` char(128) NOT NULL,
 		`name` varchar(100) NOT NULL,
