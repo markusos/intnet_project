@@ -37,7 +37,9 @@ try {
 }
 catch(PDOException $e)
 {
-	echo $e->getMessage();
+	logToFile($e->getMessage());
 }
+
+closeDB();
 
 ?>

@@ -43,7 +43,8 @@ try {
 		`salt` char(128) NOT NULL,
 		`name` varchar(100) NOT NULL,
 		`sessionID` char(32) NOT NULL,
-		`sessionLastUsed` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+		`sessionLastUsed` timestamp NOT NULL
+		DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 		`userID` int(11) NOT NULL AUTO_INCREMENT,
 		PRIMARY KEY (`userID`)
 	);";
@@ -55,7 +56,7 @@ try {
 }
 catch(PDOException $e) {
 	echo "Error Connecting to Database";
-	file_put_contents('Errors.txt', $e->getMessage(), FILE_APPEND);
+	logToFile($e->getMessage());
 }
 
 ?>

@@ -12,4 +12,5 @@ else {
 
 getJsonNewsFeed($filter);
 
+closeDB();
 ?>

@@ -5,18 +5,16 @@ include 'utility.php';
 function insertNewUser($user, $pwHash, $salt, $fullname) {
   try {
     global $db;
-    /*** INSERT data ***/
+
     $sqlString = 'INSERT INTO users (username, passhash, salt, name) VALUES (?, ?, ?, ?);';
     $statement = $db->prepare($sqlString);
     $statement->execute(array($user, $pwHash, $salt, $fullname));
 
-    /*** close the database connection ***/
-    $db = null;
     echo json_encode(array("status" => 1, "message" => "OK"));
   }
   catch(PDOException $e)
   {
-    echo $e->getMessage();
+    logToFile($e->getMessage());
   }
 }
 
@@ -34,5 +32,7 @@ if (isset($_POST["user"]) && $_POST["user"] != "" &&
 else {
   echo json_encode(array("status" => -1, "message" => "Error creating user!"));
 }
+
+closeDB();
 
 ?>

@@ -162,10 +162,10 @@ function getJsonNewsFeed($filter) {
                             'notFollowed' => $notFollowed
                             ));
 
-    $db = null;
   }
   catch(PDOException $e){
-    echo $e->getMessage();
+    echo "Error Connecting to Database";
+    logToFile($e->getMessage());
   }
 }
 

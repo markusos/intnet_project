@@ -3,11 +3,16 @@
 // Global vars
 $db = getDB();
 
-function checkSessionID($db, $sessionID){
+function logToFile($data) {
+		file_put_contents(
+			'Errors.txt',
+			date('Y-m-d H:i:s') . " : " .  $data . "\n",
+			FILE_APPEND
+		);
+}
 
-	if (!isset($sessionID)) {
-		return -1;
-	}
+function checkSessionID($sessionID){
+	global $db;
 
 	try {
 		$sessionTimeout = 30; // minutes
@@ -22,9 +27,10 @@ function checkSessionID($db, $sessionID){
 	}
 	catch(PDOException $e) {
 		echo "Error Connecting to Database";
-		file_put_contents('Errors.txt', $e->getMessage(), FILE_APPEND);
+		logToFile($e->getMessage());
 	}
 
+	session_destroy();
 	return -1;
 }
 
@@ -58,8 +64,13 @@ function getDB(){
 	}
 	catch(PDOException $e) {
 		echo "Error Connecting to Database";
-		file_put_contents('Errors.txt', $e->getMessage(), FILE_APPEND);
+		logToFile($e->getMessage());
 	}
+}
+
+function closeDB() {
+	global $db;
+	$db = null;
 }
 
 ?>
