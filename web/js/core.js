@@ -15,7 +15,7 @@ function showSuccess(message){
 	$( "#success" ).fadeIn();
 
 	// Hide after 2 sec
-	setTimeout(function(){$( "#success" ).fadeOut();},2000)
+	setTimeout(function(){$( "#success" ).fadeOut();},2000);
 }
 
 function showAlert(message){
@@ -32,15 +32,15 @@ $( "#login" ).submit(function( event ) {
 	event.preventDefault();
 
 	var $form = $( this ),
-	user = $form.find( "input[name='user']" ).val(),
-	password = $form.find( "input[name='password']" ).val();
+		user = $form.find( "input[name='user']" ).val(),
+		password = $form.find( "input[name='password']" ).val();
 
 	var posting = $.post("api/newSession.php", { user: user, password: password } );
 
 	posting.done(function( response ) {
 		console.log("Login: " + response);
 		var data = jQuery.parseJSON(response);
-		if (data.status == -1) {
+		if (data.status === -1) {
 			showAlert(data.message);
 		}
 		else {
@@ -54,12 +54,11 @@ $( "#login" ).submit(function( event ) {
 
 $( "#logout" ).submit(function( event ) {
 	event.preventDefault();
-	var $form = $( this );
 	var posting = $.post("api/logout.php");
 
 	posting.done(function( response ) {
 		var data = jQuery.parseJSON(response);
-		if (data.status == -1) {
+		if (data.status === -1) {
 			showAlert(data.message);
 		}
 		else {
@@ -97,15 +96,15 @@ function getMessages(filter, id)
 {
 	$.get( "api/getMessages.php", { filter: filter, id: id } ).done(function( response ) {
 		var data = jQuery.parseJSON(response);
-		if (data.status == 1) {
+		if (data.status === 1) {
 			$( "#messagesDiv" ).empty();
 
 			$( "#messagesDiv" ).append("<h1>" + data.title +"</h1>");
-			if (data.notFollowed == true) {
+			if (data.notFollowed === true) {
 				$( "#messagesDiv" ).append("<p><button type='button' class='btn btn-primary' onclick='follow(" + id + ")'>Follow</button></p>");
 			}
 
-			var count = 0
+			var count = 0;
 			data.messages.forEach(function(message) {
 
 				var messageHTML = "";
@@ -146,27 +145,26 @@ function getMessages(filter, id)
 
 $( "#createAccountForm" ).submit(function( event ) {
 	event.preventDefault();
-	var $form = $( this );
 
 	var $form = $( this ),
-	user = $form.find( "input[id='inputUsername']" ).val(),
-	name = $form.find( "input[id='inputName']" ).val(),
-	password = $form.find( "input[id='inputPassword']" ).val();
-	password2 = $form.find( "input[id='inputPassword2']" ).val();
+		user = $form.find( "input[id='inputUsername']" ).val(),
+		name = $form.find( "input[id='inputName']" ).val(),
+		password = $form.find( "input[id='inputPassword']" ).val(),
+		password2 = $form.find( "input[id='inputPassword2']" ).val();
 
 	var posting = $.post("api/createAccount.php", { user: user, name: name, password: password, password2: password2 } );
 
 	posting.done(function( response ) {
 		console.log(response);
 		var data = jQuery.parseJSON(response);
-		if (data.status == -1) {
+		if (data.status === -1) {
 			showAlert(data.message);
 		}
 		else {
-			inputUsername.value = "";
-			inputName.value = "";
-			inputPassword.value = "";
-			inputPassword2.value = "";
+			user.value = "";
+			name.value = "";
+			password.value = "";
+			password2.value = "";
 			loggedOut();
 			showSuccess(data.message);
 		}
@@ -178,9 +176,9 @@ function postComment(id, comment)
 	var posting = $.post("api/createComment.php", { messageID: id, text: comment } );
 
 	posting.done(function( response ) {
-		console.log("Post Comment: " + response)
+		console.log("Post Comment: " + response);
 		var data = jQuery.parseJSON(response);
-		if (data.status == -1) {
+		if (data.status === -1) {
 			showAlert(data.message);
 		}
 		else {
@@ -196,11 +194,11 @@ function postMessage(message)
 	posting.done(function( response ) {
 		console.log("Post Comment: " + response)
 		var data = jQuery.parseJSON(response);
-		if (data.status == -1) {
+		if (data.status === -1) {
 			showAlert(data.message);
 		}
 		else {
-			messageText.value = "";
+			message.value = "";
 			setFilter("self");
 		}
 	});
@@ -213,7 +211,7 @@ function follow(id)
 	posting.done(function( response ) {
 		console.log("Follow id: " + response)
 		var data = jQuery.parseJSON(response);
-		if (data.status == -1) {
+		if (data.status === -1) {
 			showAlert(data.message);
 		}
 		else {
@@ -228,7 +226,7 @@ function getFollowers(id)
 	$.get( "api/getFollowers.php", { id: id } )
 	.done(function( response ) {
 		var data = jQuery.parseJSON(response);
-		if (data.status == 1) {
+		if (data.status === 1) {
 			$( "#followersDiv" ).empty();
 
 			$( "#followersDiv" ).append("<h3>Follows</h3>");
