@@ -1,4 +1,4 @@
-<?
+<?php
 include_once 'utility.php';
 
 session_start();
