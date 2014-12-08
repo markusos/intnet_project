@@ -68,30 +68,47 @@ $( "#logout" ).submit(function( event ) {
   });
 });
 
-$( "#createAccountButton" ).click(function( event ) {
-  $( "#feed" ).hide();
-  $( "#info" ).hide();
-  $( "#alert" ).hide();
-  $( "#createAccount" ).show();
+$( "#createAccountButton" ).click(function() {
+  changeState('newAccount');
 });
 
 function loggedIn() {
-  $( "#feed" ).show();
-  $( "#info" ).hide();
-  $( "#login" ).hide();
-  $( "#logout" ).show();
-  $( "#createAccount" ).hide();
-  $( "#alert" ).hide();
+  changeState('login');
 }
 
 function loggedOut() {
+  changeState('logout');
+}
+
+function changeState(state) {
+  switch(state) {
+    case 'login':
+      hideAll();
+      $( "#feed" ).show();
+      $( "#logout" ).show();
+      break;
+    case 'logout':
+      hideAll();
+      $( "#info" ).show();
+      $( "#login" ).show();
+      break;
+    case 'newAccount':
+      hideAll();
+      $( "#login" ).show();
+      $( "#createAccount" ).show();
+      break;
+  }
+}
+
+function hideAll() {
+  $( "#info" ).hide();
+  $( "#login" ).hide();
   $( "#feed" ).hide();
-  $( "#info" ).show();
-  $( "#login" ).show();
   $( "#logout" ).hide();
   $( "#createAccount" ).hide();
   $( "#alert" ).hide();
 }
+
 
 function getMessages(filter, id)
 {
