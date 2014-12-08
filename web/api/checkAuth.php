@@ -10,5 +10,3 @@ if(!isset($_SESSION['id']) || isset($_SESSION['id'])
   echo json_encode(array("status" => -1, "message" => "Not Logged In!"));
   die();
 }
-
-?>

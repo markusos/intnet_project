@@ -168,5 +168,3 @@ function getJsonNewsFeed($filter) {
     logToFile($e->getMessage());
   }
 }
-
-?>
