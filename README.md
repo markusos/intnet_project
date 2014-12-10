@@ -9,7 +9,9 @@ The project is implemented using PHP with and MySQL database for storage.
 
 ## Setup ##
 
+- Install project dependencies by running `npm install` in the in the web folder.
+- Build the js using grunt, run `grunt` in the web folder.
 - Create a database with the name 'intnet'.
 - Configure the db user name and password in '/api/config.ini'-file.
-- Run 'setup.php' to create all the needed database tables.
+- Open 'setup.php' in your browser to create all the needed database tables. Remove the file from production env.
 - Configure the 'domain' variable in the android app to connect to the right domain.
